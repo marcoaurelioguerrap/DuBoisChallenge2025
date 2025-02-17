@@ -59,4 +59,4 @@ g <- ggplot() +
   )
 
 
-ggsave("day 01/day 01.png",width = 700, height = 800, units = 'px')
+ggsave("week 01/week 01.png",width = 700, height = 800, units = 'px')
