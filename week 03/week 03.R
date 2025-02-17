@@ -91,4 +91,4 @@ ggplot() +
     plot.margin = margin(t = 20, r = 20, b = 20, l = 20)
   )
 
-ggsave("week 03/week 03.png",width = 700, height = 800, units = 'px',dpi=96)
+ggsave("week 03/week 03.png",width = 700, height = 860, units = 'px',dpi=96)
