@@ -197,3 +197,6 @@ gg + geom_text(data=data,
     ),
     plot.margin = margin(t = 20, r = 20, b = 20, l = 20)
   )
+
+
+ggsave("week 05/week 05.png",width = 900, height = 1000, units = 'px',dpi=96*0.75)
