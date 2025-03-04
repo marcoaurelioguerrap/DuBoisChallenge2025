@@ -20,42 +20,7 @@ data <- data %>%
 # - ----
 color_pallet <- c("#c41232", "#cfb7a0", "#e6ab0e", "#1e346e", "#b7927c", "#121212")
 
-
-generate_stalactite <- function(x0, y0, width, height, n_points = 20, jitter_amount = 0.01) {
-    # Generate left edge: from apex (x0,y0) to left base corner (x0 - width/2, y0 + height)
-    left_edge <- data.frame(
-      x = seq(x0, x0 - width/2, length.out = n_points),
-      y = seq(y0, y0 + height, length.out = n_points)
-    )
-    if(n_points > 2) {
-      left_edge$x[2:(n_points-1)] <- left_edge$x[2:(n_points-1)] +
-        runif(n_points-2, -jitter_amount*width, jitter_amount*width)
-      left_edge$y[2:(n_points-1)] <- left_edge$y[2:(n_points-1)] +
-        runif(n_points-2, -jitter_amount*height, jitter_amount*height)
-    }
-    
-    # Generate right edge: from apex (x0,y0) to right base corner (x0 + width/2, y0 + height)
-    right_edge <- data.frame(
-      x = seq(x0, x0 + width/2, length.out = n_points),
-      y = seq(y0, y0 + height, length.out = n_points)
-    )
-    if(n_points > 2) {
-      right_edge$x[2:(n_points-1)] <- right_edge$x[2:(n_points-1)] +
-        runif(n_points-2, -jitter_amount*width, jitter_amount*width)
-      right_edge$y[2:(n_points-1)] <- right_edge$y[2:(n_points-1)] +
-        runif(n_points-2, -jitter_amount*height, jitter_amount*height)
-    }
-    
-    # Build the polygon: 
-    # Start at the apex, go down the left edge to the base, then along the base to the right,
-    # then back up the right edge to the apex.
-    polygon_df <- rbind(
-      left_edge,
-      right_edge[seq(n_points, 2), ]  # exclude the apex on right edge, since it's the same as left edge's first point
-    )
-    
-    polygon_df
-}
+# Not working as expected but it did work.
 generate_stalactite <- function(x0, y0, width, height, n_points = 20, jitter_amount = 0.01, convexity = 0.1) {
   # Generate left edge: from apex (x0,y0) to left base corner (x0 - width/2, y0 + height)
   left_edge <- data.frame(
@@ -110,15 +75,8 @@ generate_stalactite <- function(x0, y0, width, height, n_points = 20, jitter_amo
   polygon_df
 }
 
-# grey_stalactite <- data %>% filter(Year == 1875)
-
 positions <- c( .6 , .75, .9 , 1.15, 1.39)
-# stalactite_df <- generate_stalactite(x0 = .60,
-#                                      y0 = df_stalactite$Valuation..Dollars./2,
-#                                      width = .03, 
-#                                      height = df_stalactite$Valuation..Dollars./2,
-#                                      convexity = -0.2,
-#                                      n_points = 50, jitter_amount = 0.04)
+
 stalactite_list <- list()
 i <- 1
 df_stalactite <- data %>% filter(Year == 1875)
@@ -228,43 +186,14 @@ gg + geom_text(data=data,
               size = 3,vjust=-.15) +
   scale_color_manual(values = c("white" = "white", "black" = "black")) +
   coord_polar("x", start=0) +
-  labs(title = "ASSESSED VALUATION OF ALL TAXABLE PROPERTY\nOWNED BY GEORGIA NEGROES")
-
-# Function to generate a rough, inverted triangle (“stalactite”) polygon.
-# The apex (the pointed tip) will be at (x0, y0), and the base of the triangle is at y0 + height.
-generate_stalactite <- function(x0, y0, width, height, n_points = 20, jitter_amount = 0.01) {
-  # Generate left edge: from apex (x0,y0) to left base corner (x0 - width/2, y0 + height)
-  left_edge <- data.frame(
-    x = seq(x0, x0 - width/2, length.out = n_points),
-    y = seq(y0, y0 + height, length.out = n_points)
+  labs(title = "ASSESSED VALUATION OF ALL TAXABLE PROPERTY\nOWNED BY GEORGIA NEGROES") +
+  theme(
+    plot.background = element_rect(fill = "#e6d6c6ff"), 
+    plot.title = element_text(
+      family = "Teko",
+      size = 24,
+      hjust = 0.5,
+      margin = margin(t = 20, b = 20) 
+    ),
+    plot.margin = margin(t = 20, r = 20, b = 20, l = 20)
   )
-  if(n_points > 2) {
-    left_edge$x[2:(n_points-1)] <- left_edge$x[2:(n_points-1)] +
-      runif(n_points-2, -jitter_amount*width, jitter_amount*width)
-    left_edge$y[2:(n_points-1)] <- left_edge$y[2:(n_points-1)] +
-      runif(n_points-2, -jitter_amount*height, jitter_amount*height)
-  }
-  
-  # Generate right edge: from apex (x0,y0) to right base corner (x0 + width/2, y0 + height)
-  right_edge <- data.frame(
-    x = seq(x0, x0 + width/2, length.out = n_points),
-    y = seq(y0, y0 + height, length.out = n_points)
-  )
-  if(n_points > 2) {
-    right_edge$x[2:(n_points-1)] <- right_edge$x[2:(n_points-1)] +
-      runif(n_points-2, -jitter_amount*width, jitter_amount*width)
-    right_edge$y[2:(n_points-1)] <- right_edge$y[2:(n_points-1)] +
-      runif(n_points-2, -jitter_amount*height, jitter_amount*height)
-  }
-  
-  # Build the polygon: 
-  # Start at the apex, go down the left edge to the base, then along the base to the right,
-  # then back up the right edge to the apex.
-  polygon_df <- rbind(
-    left_edge,
-    right_edge[seq(n_points, 2), ]  # exclude the apex on right edge, since it's the same as left edge's first point
-  )
-  
-  polygon_df
-}
-
