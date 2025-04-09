@@ -4,4 +4,4 @@ https://github.com/ajstarks/dubois-data-portraits/blob/master/challenge/2025/REA
 
 ### Result
 
-![overview](./overview.png)
+![overview](overview.png)
